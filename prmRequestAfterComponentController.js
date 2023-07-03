@@ -14,7 +14,7 @@ app.controller('prmRequestAfterController', ['$scope', '$timeout', function($sco
         }
     }
     
-    // organize in alphabetical order the library list and eventually reset the default pickup location 
+    // sort in alphabetical order the libraries listed and eventually reset the default pickup location 
     var organizeForm = function(reset) {
         if (reset) {
             vm.formdata.owner = "";
