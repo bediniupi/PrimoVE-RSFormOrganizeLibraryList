@@ -52,7 +52,7 @@ app.controller('prmRequestAfterController', ['$scope', '$timeout', function($sco
                 return null;
              }
         }, function() {
-                // index 3 - sepcifica chapter
+                // index 3 - specific chapter
             try {
                 return vm.parentCtrl.requestService._formData.specificChapterPages;
              }  catch(e) {
