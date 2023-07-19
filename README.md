@@ -1,4 +1,4 @@
-# PrimoVE-RSFormrganizeLibraryList
+# PrimoVE-RSFormOrganizeLibraryList
 AngularJS prmRequestAfter component and controller to sort in alphabetical order the libraries listed in PrimoVE RS request module (blankILL)
 
 The controller also reset the pickup location.
