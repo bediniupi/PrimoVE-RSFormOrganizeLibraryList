@@ -69,12 +69,10 @@ app.controller('prmRequestAfterController', ['$scope', '$timeout', '$translate',
                // get the page language ("en", "it",...)    
                vm.lang = $translate.use();
                if (newvalue[0]) {
-                var reqServ = getRequestData();
-                // exit if not RS request
-                if (reqServ._service.type != "AlmaResourceSharing") {
+                  // exit if not RS request
+                if (vm.parentCtrl.requestService._service.type != "AlmaResourceSharing") {
                     return null;
                 }
-           
                 // get parent scope data for sort function
                 vm.form = vm.parentCtrl.requestService._form[0];
                 vm.formdata = vm.parentCtrl.requestService._formData;
