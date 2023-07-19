@@ -3,33 +3,27 @@ app.component('prmRequestAfter', {
          controller: 'prmRequestAfterController'
          });
 
-app.controller('prmRequestAfterController', ['$scope', '$timeout', function($scope, $timeout) {
+app.controller('prmRequestAfterController', ['$scope', '$timeout', '$translate', function($scope, $timeout, $translate) {
     var vm = this; 
-    
-    function getRequestData() {
-        try {
-            return vm.parentCtrl.requestService;
-        } catch(e) {
-            return null;
-        }
-    }
-    
+       
     // sort in alphabetical order the libraries listed and eventually reset the default pickup location 
     var organizeForm = function(reset) {
         if (reset) {
+            // the values must be empty strings, other solutions (null, 0, delete the parameter) cause sending form stuck
+            // sending a form without pickup library selected cause now an internal server error message displaying
+            // the code is modified below to display a more specific error message
             vm.formdata.owner = "";
-            vm.formdata.pickupLocation = 0;
+            vm.formdata.pickupLocation = "";
             vm.formfieldsOptions = vm.parentCtrl.requestService._formFields[42].options;
             vm.formfieldsOptions[0].label = "";
-            vm.formfieldsOptions[0].value = 0;
+            vm.formfieldsOptions[0].value = "";
         }
         vm.form.options.sort((a, b) => a.label.toUpperCase().localeCompare(b.label.toUpperCase()));
        
     }
     
     vm.$onInit = function() {
-       
-        $scope.$watchGroup([
+       $scope.$watchGroup([
            function() {
                // index 0 - module inizialization
                 try {
@@ -64,19 +58,26 @@ app.controller('prmRequestAfterController', ['$scope', '$timeout', function($sco
                 return vm.parentCtrl.requestService._formData.pickupLocation;
              }  catch(e) {
                 return null;
+         }, function() {
+               // index 5 - catch internal server error when the form is sent without pickup library
+            try {
+                return vm.parentCtrl.opacService._responseStatus.isSuccess;
+             }  catch(e) {
+                return null;
              }
         }], function(newvalue, oldvalue) {
-                              
-            if (newvalue[0]) {
+               // get the page language ("en", "it",...)    
+               vm.lang = $translate.use();
+               if (newvalue[0]) {
                 var reqServ = getRequestData();
                 // exit if not RS request
                 if (reqServ._service.type != "AlmaResourceSharing") {
                     return null;
                 }
            
-                // get parent scope data for function
-                vm.form = reqServ._form[0];
-                vm.formdata = reqServ._formData;
+                // get parent scope data for sort function
+                vm.form = vm.parentCtrl.requestService._form[0];
+                vm.formdata = vm.parentCtrl.requestService._formData;
                 // call function immediately
                 if (newvalue[0] != oldvalue[0]) {
                     organizeForm(true);                    
@@ -93,8 +94,20 @@ app.controller('prmRequestAfterController', ['$scope', '$timeout', function($sco
                     }    
                 }    
             }
+         // catch the "internal server error" message when the form is sent without pickup library and display an errore message more specific
+            if (newvalue[5] == oldvalue[5] && newvalue[5] == false) {
+                    vm.parentCtrl.opacService._responseStatus.isSuccess = null;
+                    }
+             if (newvalue[5]!=oldvalue[5] && newvalue[5]===false) {
+                    const errorMsg = {
+                        it: "La biblioteca di riferimento non è stata scelta, si prega di selezionarla prima di inviare il modulo di richiesta di prestito interbibliotecario.", 
+                        en: "The pickup library was not chosen, please select it before sending the ILL request form."
+                    };
+                    if (vm.parentCtrl.requestService._formData.owner == "") {
+                        vm.parentCtrl.opacService._responseStatus.msg = errorMsg[vm.lang];
+                        }
+             }
           
         });
-          
     }
 }]);
