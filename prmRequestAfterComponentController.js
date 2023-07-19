@@ -12,6 +12,7 @@ app.controller('prmRequestAfterController', ['$scope', '$timeout', '$translate',
             // the values must be empty strings, other solutions (null, 0, delete the parameter) cause sending form stuck
             // sending a form without pickup library selected cause now an internal server error message displaying
             // the code is modified below to display a more specific error message
+            vm.formdata = vm.parentCtrl.requestService._formData;
             vm.formdata.owner = "";
             vm.formdata.pickupLocation = "";
             vm.formfieldsOptions = vm.parentCtrl.requestService._formFields[42].options;
@@ -66,22 +67,21 @@ app.controller('prmRequestAfterController', ['$scope', '$timeout', '$translate',
                 return null;
              }
         }], function(newvalue, oldvalue) {
-               // get the page language ("en", "it",...)    
+               // get the page language ("en", "it",...) and parent scope form data for sort function    
                vm.lang = $translate.use();
+               vm.form = vm.parentCtrl.requestService._form[0];
+              
                if (newvalue[0]) {
                   // exit if not RS request
                 if (vm.parentCtrl.requestService._service.type != "AlmaResourceSharing") {
                     return null;
                 }
-                // get parent scope data for sort function
-                vm.form = vm.parentCtrl.requestService._form[0];
-                vm.formdata = vm.parentCtrl.requestService._formData;
-                // call function immediately
+                
+                // call function immediately when form is inizialized
                 if (newvalue[0] != oldvalue[0]) {
                     organizeForm(true);                    
                 } else {
-               
-                    if (newvalue[1] != oldvalue[1] || newvalue[2] != oldvalue[2] || newvalue[3] != oldvalue[3]) {
+                      if (newvalue[1] != oldvalue[1] || newvalue[2] != oldvalue[2] || newvalue[3] != oldvalue[3]) {
                         // function call on next  digest cycle, otherwise the parent scope is reinizialized
                         if (oldvalue[4] == 0) {
                             $timeout(organizeForm, 0, true, true);
