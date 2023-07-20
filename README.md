@@ -20,4 +20,4 @@ To apply the code upload the PrimoVE customization package zip file into your vi
 
 For further information please refer to this tech blog article:
 
-[Changing the PrimoVE behavior and content in AngularJS coding style: the RS form case](https://pages.github.com/](https://developers.exlibrisgroup.com/blog/changing-the-primove-behavior-and-content-in-angularjs-coding-style-the-rs-form-case/)https://developers.exlibrisgroup.com/blog/changing-the-primove-behavior-and-content-in-angularjs-coding-style-the-rs-form-case/)
+[Changing the PrimoVE behavior and content in AngularJS coding style: the RS form case](https://developers.exlibrisgroup.com/blog/changing-the-primove-behavior-and-content-in-angularjs-coding-style-the-rs-form-case/)
