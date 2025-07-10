@@ -16,8 +16,7 @@ app.controller('prmRequestAfterController', ['$scope', '$timeout', '$translate',
             vm.formdata.owner = "";
             vm.formdata.pickupLocation = "";
             vm.formfieldsOptions = vm.parentCtrl.requestService._formFields[42].options;
-            vm.formfieldsOptions[0].label = "";
-            vm.formfieldsOptions[0].value = "";
+            vm.formfieldsOptions.unshift({label: "", value: ""});
         }
         vm.form.options.sort((a, b) => a.label.toUpperCase().localeCompare(b.label.toUpperCase()));
        
